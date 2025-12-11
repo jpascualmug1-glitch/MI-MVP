@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   <title>CultureSwap Hub - Prototype</title>
+   <!-- Tailwind CSS for fast design -->
+   <script src="https://cdn.tailwindcss.com"></script>
+   <!-- FontAwesome for icons -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <style>
+       /* Custom styles to simulate mobile app */
+       body {
+           background-color: #f3f4f6;
+           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+           height: 100vh;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           overflow: hidden;
+       }
+       .mobile-container {
+           width: 100%;
+           max-width: 375px; /* iPhone size */
+           height: 100%;
+           max-height: 750px;
+           background-color: white;
+           position: relative;
+           overflow-y: auto;
+           display: flex;
+           flex-direction: column;
+           box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+           border-radius: 20px;
+       }
+       /* Hide scrollbar */
+       .mobile-container::-webkit-scrollbar {
+           display: none;
+       }
+       .screen {
+           display: none; /* All hidden by default */
+           flex-direction: column;
+           height: 100%;
+           animation: fadeIn 0.3s ease-in-out;
+       }
+       .screen.active {
+           display: flex;
+       }
+       @keyframes fadeIn {
+           from { opacity: 0; transform: translateY(10px); }
+           to { opacity: 1; transform: translateY(0); }
+       }
+       .chat-bubble-me {
+           background-color: #3B82F6;
+           color: white;
+           border-radius: 18px 18px 0 18px;
+           padding: 10px 15px;
+           max-width: 80%;
+           align-self: flex-end;
+           margin-bottom: 10px;
+           box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+       }
+       .chat-bubble-them {
+           background-color: #E5E7EB;
+           color: #1F2937;
+           border-radius: 18px 18px 18px 0;
+           padding: 10px 15px;
+           max-width: 80%;
+           align-self: flex-start;
+           margin-bottom: 10px;
+           box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+       }
+       .nav-btn {
+           color: #9CA3AF;
+           transition: color 0.2s;
+       }
+       .nav-btn.active {
+           color: #3B82F6;
+       }
+   </style>
+</head>
+<body>
+
+
+   <!-- Mobile Frame -->
+   <div class="mobile-container border-4 border-gray-800">
+      
+       <!-- SCREEN 1: SPLASH SCREEN (LOGO) -->
+       <div id="screen-splash" class="screen active justify-center items-center bg-blue-600 text-white h-full">
+           <div class="text-6xl mb-4"><i class="fa-solid fa-earth-americas"></i></div>
+           <h1 class="text-3xl font-bold tracking-wider">CultureSwap</h1>
+           <p class="text-blue-200 mt-2">Connect. Learn. Belong.</p>
+           <div class="mt-8 animate-pulse">Loading...</div>
+       </div>
+
+
+       <!-- SCREEN 2: LOGIN -->
+       <div id="screen-login" class="screen justify-center px-8 bg-white">
+           <div class="text-center mb-10">
+               <div class="text-blue-600 text-5xl mb-4"><i class="fa-solid fa-graduation-cap"></i></div>
+               <h2 class="text-2xl font-bold text-gray-800">Welcome</h2>
+               <p class="text-gray-500">Connect with your school</p>
+           </div>
+          
+           <button onclick="goToScreen('screen-home')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition transform hover:scale-105 mb-4 flex items-center justify-center gap-2">
+               <i class="fa-solid fa-school"></i> Log in with School ID
+           </button>
+           <button class="w-full bg-gray-100 text-gray-600 font-bold py-3 px-4 rounded-xl mb-4">
+               I am a Coordinator
+           </button>
+           <p class="text-xs text-center text-gray-400 mt-4">Verified by Lincoln High School District</p>
+       </div>
+
+
+       <!-- SCREEN 3: HOME (DASHBOARD) -->
+       <div id="screen-home" class="screen bg-gray-50">
+           <!-- Header -->
+           <div class="bg-white p-6 pb-4 shadow-sm z-10">
+               <div class="flex justify-between items-center">
+                   <div>
+                       <h1 class="text-xl font-bold text-gray-800">Hi, Jorge </h1>
+                       <p class="text-sm text-gray-500">Exchange Student</p>
+                   </div>
+                   <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                       <i class="fa-solid fa-user"></i>
+                   </div>
+               </div>
+           </div>
+
+
+           <!-- Content -->
+           <div class="p-6 flex-1 overflow-y-auto">
+               <!-- Status Card -->
+               <div class="bg-blue-600 text-white rounded-2xl p-5 mb-6 shadow-lg shadow-blue-200">
+                   <div class="flex justify-between items-start mb-2">
+                       <h3 class="font-bold text-lg">Your Veteran Mentor</h3>
+                       <span class="bg-blue-500 px-2 py-1 rounded text-xs">Active</span>
+                   </div>
+                   <p class="text-blue-100 text-sm mb-4">You have a new message from Elena.</p>
+                   <button onclick="goToScreen('screen-chat')" class="bg-white text-blue-600 px-4 py-2 rounded-lg text-sm font-bold w-full">View Chat</button>
+               </div>
+
+
+               <!-- Quick Actions -->
+               <h3 class="font-bold text-gray-800 mb-4">Explore</h3>
+               <div class="grid grid-cols-2 gap-4 mb-6">
+                   <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center h-32 cursor-pointer hover:border-blue-300 transition" onclick="alert('Demo: Here you would see slang and culture guides.')">
+                       <div class="w-12 h-12 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center text-xl mb-2">
+                           <i class="fa-solid fa-book-open"></i>
+                       </div>
+                       <span class="text-sm font-medium text-gray-600">Local Guides</span>
+                   </div>
+                   <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center h-32 cursor-pointer hover:border-blue-300 transition" onclick="goToScreen('screen-match')">
+                       <div class="w-12 h-12 bg-green-100 text-green-500 rounded-full flex items-center justify-center text-xl mb-2">
+                           <i class="fa-solid fa-users"></i>
+                       </div>
+                       <span class="text-sm font-medium text-gray-600">Find Mentor</span>
+                   </div>
+               </div>
+           </div>
+
+
+           <!-- Bottom Nav -->
+           <div class="bg-white border-t border-gray-200 py-3 px-6 flex justify-between items-center">
+               <button class="nav-btn active flex flex-col items-center gap-1 text-xs">
+                   <i class="fa-solid fa-house text-xl"></i> Home
+               </button>
+               <button class="nav-btn flex flex-col items-center gap-1 text-xs" onclick="goToScreen('screen-match')">
+                   <i class="fa-solid fa-magnifying-glass text-xl"></i> Match
+               </button>
+               <button class="nav-btn flex flex-col items-center gap-1 text-xs" onclick="goToScreen('screen-chat')">
+                   <i class="fa-solid fa-comment text-xl"></i> Chat
+               </button>
+           </div>
+       </div>
+
+
+       <!-- SCREEN 4: MATCHING -->
+       <div id="screen-match" class="screen bg-gray-50">
+           <div class="p-6">
+               <button onclick="goToScreen('screen-home')" class="text-gray-400 hover:text-gray-800 mb-4"><i class="fa-solid fa-arrow-left"></i> Back</button>
+               <h2 class="text-2xl font-bold text-gray-800 mb-2">New Match</h2>
+               <p class="text-gray-500 mb-6">Based on your origin:  Spain</p>
+
+
+               <!-- Profile Card -->
+               <div class="bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100">
+                   <div class="h-32 bg-gradient-to-r from-indigo-500 to-purple-600 relative">
+                       <div class="absolute top-4 right-4 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full shadow-sm">
+                           <i class="fa-solid fa-star"></i> VETERAN
+                       </div>
+                       <div class="absolute -bottom-10 left-6 w-20 h-20 bg-white rounded-full p-1">
+                           <div class="w-full h-full bg-gray-200 rounded-full overflow-hidden">
+                               <!-- Placeholder Image -->
+                               <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Elena" alt="Avatar" class="w-full h-full object-cover">
+                           </div>
+                       </div>
+                   </div>
+                   <div class="pt-12 px-6 pb-6">
+                       <div class="flex justify-between items-start">
+                           <div>
+                               <h3 class="text-xl font-bold text-gray-800">Elena Gomez</h3>
+                               <p class="text-sm text-indigo-600 font-semibold">Exchange Alumni '24 • Madrid</p>
+                           </div>
+                           <div class="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded-full font-bold">100% Match</div>
+                       </div>
+                      
+                       <hr class="my-4 border-gray-100">
+                      
+                       <div class="space-y-3">
+                           <div>
+                               <h4 class="text-xs font-bold text-gray-400 uppercase">Experience</h4>
+                               <div class="flex gap-2 mt-1">
+                                   <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs">Lived in Ohio</span>
+                                   <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs">Survived Homesickness</span>
+                               </div>
+                           </div>
+                           <div>
+                               <h4 class="text-xs font-bold text-gray-400 uppercase">Bio</h4>
+                               <p class="text-sm text-gray-600 leading-relaxed">¡Hola! I did my exchange year last year. I can help you understand American host families and deal with culture shock.</p>
+                           </div>
+                       </div>
+
+
+                       <button onclick="goToScreen('screen-chat')" class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
+                           <i class="fa-regular fa-paper-plane"></i> Send Message
+                       </button>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+
+       <!-- SCREEN 5: CHAT -->
+       <div id="screen-chat" class="screen bg-white flex flex-col h-full">
+           <!-- Chat Header -->
+           <div class="bg-white p-4 shadow-sm flex items-center gap-4 border-b border-gray-100 z-10">
+               <button onclick="goToScreen('screen-home')" class="text-gray-400 hover:text-gray-800"><i class="fa-solid fa-arrow-left"></i></button>
+               <div class="relative">
+                   <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+                       <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Elena" alt="Avatar">
+                   </div>
+                   <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+               </div>
+               <div>
+                   <h3 class="font-bold text-gray-800 text-sm">Elena Gomez</h3>
+                   <p class="text-xs text-green-600">Typing...</p>
+               </div>
+           </div>
+
+
+           <!-- Chat Messages -->
+           <div class="flex-1 overflow-y-auto p-4 flex flex-col bg-gray-50" id="chat-container">
+               <div class="text-center text-xs text-gray-400 my-4">Today, 10:23 AM</div>
+              
+               <div class="chat-bubble-them">
+                   ¡Hola Jorge! I saw you just arrived. How are you feeling?
+               </div>
+              
+               <div class="chat-bubble-me">
+                   Hi Elena! A bit overwhelmed honestly. My host family is nice but...
+               </div>
+
+
+               <div class="chat-bubble-them">
+                   Totalmente normal. The first week is the hardest. What happened?
+               </div>
+           </div>
+
+
+           <!-- Chat Input -->
+           <div class="p-4 border-t border-gray-100 bg-white">
+               <div class="flex gap-2">
+                   <input type="text" placeholder="Type a message..." class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                   <button class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-md hover:bg-blue-700 transition" onclick="sendMessage()">
+                       <i class="fa-solid fa-paper-plane text-sm"></i>
+                   </button>
+               </div>
+           </div>
+       </div>
+
+
+   </div>
+
+
+   <script>
+       // Simple logic to simulate navigation
+       setTimeout(() => {
+           document.getElementById('screen-splash').classList.remove('active');
+           document.getElementById('screen-login').classList.add('active');
+       }, 2500); // Splash screen lasts 2.5 seconds
+
+
+       function goToScreen(screenId) {
+           // Hide all
+           document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+           // Show target
+           document.getElementById(screenId).classList.add('active');
+       }
+
+
+       function sendMessage() {
+           const container = document.getElementById('chat-container');
+           // Simulate sent message
+           const myMsg = document.createElement('div');
+           myMsg.className = 'chat-bubble-me animate-pulse';
+           myMsg.innerText = "I don't know if I should offer to help with dishes...";
+           container.appendChild(myMsg);
+          
+           // Scroll to bottom
+           container.scrollTop = container.scrollHeight;
+
+
+           // Simulate reply
+           setTimeout(() => {
+               myMsg.classList.remove('animate-pulse');
+               const theirMsg = document.createElement('div');
+               theirMsg.className = 'chat-bubble-them';
+               theirMsg.innerText = "ALWAYS offer! Even if they say no. It's super polite here. ";
+               container.appendChild(theirMsg);
+               container.scrollTop = container.scrollHeight;
+           }, 1500);
+       }
+   </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CultureSwap Hub - Prototype</title>
+    <!-- Tailwind CSS for fast design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom styles to simulate mobile app */
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .mobile-container {
+            width: 100%;
+            max-width: 375px; /* iPhone size */
+            height: 100%;
+            max-height: 750px;
+            background-color: white;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 20px;
+        }
+        /* Hide scrollbar */
+        .mobile-container::-webkit-scrollbar {
+            display: none;
+        }
+        .screen {
+            display: none; /* All hidden by default */
+            flex-direction: column;
+            height: 100%;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .screen.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chat-bubble-me {
+            background-color: #3B82F6;
+            color: white;
+            border-radius: 18px 18px 0 18px;
+            padding: 10px 15px;
+            max-width: 80%;
+            align-self: flex-end;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .chat-bubble-them {
+            background-color: #E5E7EB;
+            color: #1F2937;
+            border-radius: 18px 18px 18px 0;
+            padding: 10px 15px;
+            max-width: 80%;
+            align-self: flex-start;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .nav-btn {
+            color: #9CA3AF;
+            transition: color 0.2s;
+        }
+        .nav-btn.active {
+            color: #3B82F6;
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- Mobile Frame -->
+    <div class="mobile-container border-4 border-gray-800">
+       
+        <!-- SCREEN 1: SPLASH SCREEN (LOGO) -->
+        <div id="screen-splash" class="screen active justify-center items-center bg-blue-600 text-white h-full">
+            <div class="text-6xl mb-4"><i class="fa-solid fa-earth-americas"></i></div>
+            <h1 class="text-3xl font-bold tracking-wider">CultureSwap</h1>
+            <p class="text-blue-200 mt-2">Connect. Learn. Belong.</p>
+            <div class="mt-8 animate-pulse">Loading...</div>
+        </div>
+
+
+        <!-- SCREEN 2: LOGIN -->
+        <div id="screen-login" class="screen justify-center px-8 bg-white">
+            <div class="text-center mb-10">
+                <div class="text-blue-600 text-5xl mb-4"><i class="fa-solid fa-graduation-cap"></i></div>
+                <h2 class="text-2xl font-bold text-gray-800">Welcome</h2>
+                <p class="text-gray-500">Connect with your school</p>
+            </div>
+           
+            <button onclick="goToScreen('screen-home')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition transform hover:scale-105 mb-4 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-school"></i> Log in with School ID
+            </button>
+            <button class="w-full bg-gray-100 text-gray-600 font-bold py-3 px-4 rounded-xl mb-4">
+                I am a Coordinator
+            </button>
+            <p class="text-xs text-center text-gray-400 mt-4">Verified by Lincoln High School District</p>
+        </div>
+
+
+        <!-- SCREEN 3: HOME (DASHBOARD) -->
+        <div id="screen-home" class="screen bg-gray-50">
+            <!-- Header -->
+            <div class="bg-white p-6 pb-4 shadow-sm z-10">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Hi, Jorge 👋</h1>
+                        <p class="text-sm text-gray-500">Exchange Student</p>
+                    </div>
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Content -->
+            <div class="p-6 flex-1 overflow-y-auto">
+                <!-- Status Card -->
+                <div class="bg-blue-600 text-white rounded-2xl p-5 mb-6 shadow-lg shadow-blue-200">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-lg">Your Veteran Mentor</h3>
+                        <span class="bg-blue-500 px-2 py-1 rounded text-xs">Active</span>
+                    </div>
+                    <p class="text-blue-100 text-sm mb-4">You have a new message from Elena.</p>
+                    <button onclick="goToScreen('screen-chat')" class="bg-white text-blue-600 px-4 py-2 rounded-lg text-sm font-bold w-full">View Chat</button>
+                </div>
+
+
+                <!-- Quick Actions -->
+                <h3 class="font-bold text-gray-800 mb-4">Explore</h3>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center h-32 cursor-pointer hover:border-blue-300 transition" onclick="alert('Demo: Here you would see slang and culture guides.')">
+                        <div class="w-12 h-12 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center text-xl mb-2">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <span class="text-sm font-medium text-gray-600">Local Guides</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center h-32 cursor-pointer hover:border-blue-300 transition" onclick="goToScreen('screen-match')">
+                        <div class="w-12 h-12 bg-green-100 text-green-500 rounded-full flex items-center justify-center text-xl mb-2">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span class="text-sm font-medium text-gray-600">Find Mentor</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Bottom Nav -->
+            <div class="bg-white border-t border-gray-200 py-3 px-6 flex justify-between items-center">
+                <button class="nav-btn active flex flex-col items-center gap-1 text-xs">
+                    <i class="fa-solid fa-house text-xl"></i> Home
+                </button>
+                <button class="nav-btn flex flex-col items-center gap-1 text-xs" onclick="goToScreen('screen-match')">
+                    <i class="fa-solid fa-magnifying-glass text-xl"></i> Match
+                </button>
+                <button class="nav-btn flex flex-col items-center gap-1 text-xs" onclick="goToScreen('screen-chat')">
+                    <i class="fa-solid fa-comment text-xl"></i> Chat
+                </button>
+            </div>
+        </div>
+
+
+        <!-- SCREEN 4: MATCHING -->
+        <div id="screen-match" class="screen bg-gray-50">
+            <div class="p-6">
+                <button onclick="goToScreen('screen-home')" class="text-gray-400 hover:text-gray-800 mb-4"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">New Match</h2>
+                <p class="text-gray-500 mb-6">Based on your origin: 🇪🇸 Spain</p>
+
+
+                <!-- Profile Card -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100">
+                    <div class="h-32 bg-gradient-to-r from-indigo-500 to-purple-600 relative">
+                        <div class="absolute top-4 right-4 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full shadow-sm">
+                            <i class="fa-solid fa-star"></i> VETERAN
+                        </div>
+                        <div class="absolute -bottom-10 left-6 w-20 h-20 bg-white rounded-full p-1">
+                            <div class="w-full h-full bg-gray-200 rounded-full overflow-hidden">
+                                <!-- Placeholder Image -->
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Elena" alt="Avatar" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-12 px-6 pb-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Elena Gomez</h3>
+                                <p class="text-sm text-indigo-600 font-semibold">Exchange Alumni '24 • Madrid</p>
+                            </div>
+                            <div class="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded-full font-bold">100% Match</div>
+                        </div>
+                       
+                        <hr class="my-4 border-gray-100">
+                       
+                        <div class="space-y-3">
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-400 uppercase">Experience</h4>
+                                <div class="flex gap-2 mt-1">
+                                    <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs">Lived in Ohio</span>
+                                    <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs">Survived Homesickness</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-400 uppercase">Bio</h4>
+                                <p class="text-sm text-gray-600 leading-relaxed">¡Hola! I did my exchange year last year. I can help you understand American host families and deal with culture shock.</p>
+                            </div>
+                        </div>
+
+
+                        <button onclick="goToScreen('screen-chat')" class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
+                            <i class="fa-regular fa-paper-plane"></i> Send Message
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SCREEN 5: CHAT -->
+        <div id="screen-chat" class="screen bg-white flex flex-col h-full">
+            <!-- Chat Header -->
+            <div class="bg-white p-4 shadow-sm flex items-center gap-4 border-b border-gray-100 z-10">
+                <button onclick="goToScreen('screen-home')" class="text-gray-400 hover:text-gray-800"><i class="fa-solid fa-arrow-left"></i></button>
+                <div class="relative">
+                    <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Elena" alt="Avatar">
+                    </div>
+                    <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 text-sm">Elena Gomez</h3>
+                    <p class="text-xs text-green-600">Typing...</p>
+                </div>
+            </div>
+
+
+            <!-- Chat Messages -->
+            <div class="flex-1 overflow-y-auto p-4 flex flex-col bg-gray-50" id="chat-container">
+                <div class="text-center text-xs text-gray-400 my-4">Today, 10:23 AM</div>
+               
+                <div class="chat-bubble-them">
+                    ¡Hola Jorge! I saw you just arrived. How are you feeling?
+                </div>
+               
+                <div class="chat-bubble-me">
+                    Hi Elena! A bit overwhelmed honestly. My host family is nice but...
+                </div>
+
+
+                <div class="chat-bubble-them">
+                    Totalmente normal. The first week is the hardest. What happened?
+                </div>
+            </div>
+
+
+            <!-- Chat Input -->
+            <div class="p-4 border-t border-gray-100 bg-white">
+                <div class="flex gap-2">
+                    <input type="text" placeholder="Type a message..." class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-md hover:bg-blue-700 transition" onclick="sendMessage()">
+                        <i class="fa-solid fa-paper-plane text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <script>
+        // Simple logic to simulate navigation
+        setTimeout(() => {
+            document.getElementById('screen-splash').classList.remove('active');
+            document.getElementById('screen-login').classList.add('active');
+        }, 2500); // Splash screen lasts 2.5 seconds
+
+
+        function goToScreen(screenId) {
+            // Hide all
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            // Show target
+            document.getElementById(screenId).classList.add('active');
+        }
+
+
+        function sendMessage() {
+            const container = document.getElementById('chat-container');
+            // Simulate sent message
+            const myMsg = document.createElement('div');
+            myMsg.className = 'chat-bubble-me animate-pulse';
+            myMsg.innerText = "I don't know if I should offer to help with dishes...";
+            container.appendChild(myMsg);
+           
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+
+
+            // Simulate reply
+            setTimeout(() => {
+                myMsg.classList.remove('animate-pulse');
+                const theirMsg = document.createElement('div');
+                theirMsg.className = 'chat-bubble-them';
+                theirMsg.innerText = "ALWAYS offer! Even if they say no. It's super polite here. 😉";
+                container.appendChild(theirMsg);
+                container.scrollTop = container.scrollHeight;
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
